@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_todo_app/state/todo_provider.dart';
 
-class TodoListPage extends StatelessWidget {
-  const TodoListPage({super.key});
-
-  final List<Map<String, dynamic>> todos = const [
-    {'id': 1, 'title': '買い物に行く', 'isCompleted': false},
-    {'id': 2, 'title': 'Flutterを勉強する', 'isCompleted': true},
-    {'id': 3, 'title': '掃除をする', 'isCompleted': false},
-  ];
+class TodoListScreen extends ConsumerWidget {
+  const TodoListScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final todos = ref.watch(todoProvider);
+
     return Scaffold(
       appBar: AppBar(title: const Text('Todo List')),
       body: ListView.builder(

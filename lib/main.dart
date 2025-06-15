@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'ui/todo_list_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_todo_app/ui/screen/todo_list/todo_list_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -10,6 +11,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(title: 'Todo App', home: TodoListPage());
+    return const MaterialApp(title: 'Todo App', home: TodoListScreen());
   }
 }
