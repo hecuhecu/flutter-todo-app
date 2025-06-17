@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter_todo_app/state/todo_provider.dart';
 
+@RoutePage()
 class TodoListScreen extends ConsumerWidget {
   const TodoListScreen({super.key});
 
