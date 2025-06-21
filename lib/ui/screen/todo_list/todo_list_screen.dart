@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter_todo_app/router/app_router.gr.dart';
 import 'package:flutter_todo_app/state/todo_provider.dart';
 
 @RoutePage()
@@ -39,6 +40,9 @@ class TodoListScreen extends ConsumerWidget {
                     ? Icons.check_circle
                     : Icons.radio_button_unchecked,
                 color: todo['isCompleted'] ? Colors.green : Colors.grey,
+              ),
+              onTap: () => context.router.push(
+                TodoDetailRoute(id: todo['id'].toString()),
               ),
             );
           },
