@@ -41,9 +41,7 @@ class TodoListScreen extends ConsumerWidget {
                     : Icons.radio_button_unchecked,
                 color: todo['isCompleted'] ? Colors.green : Colors.grey,
               ),
-              onTap: () => context.router.push(
-                TodoDetailRoute(id: todo['id'].toString()),
-              ),
+              onTap: () => context.router.push(TodoDetailRoute(todoData: todo)),
             );
           },
         ),
