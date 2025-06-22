@@ -10,41 +10,67 @@ class TodoListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final todosAsync = ref.watch(todoListProvider);
+    final todos = ref.watch(todoListProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Todo List')),
-      body: todosAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) {
-          print('Error: $error');
-          print('Stack: $stack');
-          return Center(child: Text('error: $error'));
+      body: ListView.builder(
+        itemCount: todos.length,
+        itemBuilder: (context, index) {
+          final todo = todos[index];
+          return ListTile(
+            title: Text(
+              todo['title'],
+              style: TextStyle(
+                decoration: todo['isCompleted']
+                    ? TextDecoration.lineThrough
+                    : null,
+                color: todo['isCompleted'] ? Colors.grey : Colors.black,
+              ),
+            ),
+            leading: Icon(
+              todo['isCompleted']
+                  ? Icons.check_circle
+                  : Icons.radio_button_unchecked,
+              color: todo['isCompleted'] ? Colors.green : Colors.grey,
+            ),
+            onTap: () => context.router.push(TodoDetailRoute(todoData: todo)),
+          );
         },
-        data: (todos) => ListView.builder(
-          itemCount: todos.length,
-          itemBuilder: (context, index) {
-            final todo = todos[index];
-            return ListTile(
-              title: Text(
-                todo['title'],
-                style: TextStyle(
-                  decoration: todo['isCompleted']
-                      ? TextDecoration.lineThrough
-                      : null,
-                  color: todo['isCompleted'] ? Colors.grey : Colors.black,
-                ),
-              ),
-              leading: Icon(
-                todo['isCompleted']
-                    ? Icons.check_circle
-                    : Icons.radio_button_unchecked,
-                color: todo['isCompleted'] ? Colors.green : Colors.grey,
-              ),
-              onTap: () => context.router.push(TodoDetailRoute(todoData: todo)),
-            );
-          },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _showAddTodoDialog(context, ref),
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+
+  void _showAddTodoDialog(BuildContext context, WidgetRef ref) {
+    final TextEditingController controller = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('新しい Todo'),
+        content: TextField(
+          controller: controller,
+          decoration: InputDecoration(hintText: 'Todo のタイトルを入力'),
         ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('キャンセル'),
+          ),
+          TextButton(
+            onPressed: () {
+              if (controller.text.isNotEmpty) {
+                ref.read(todoListProvider.notifier).addTodo(controller.text);
+                Navigator.pop(context);
+              }
+            },
+            child: Text('追加'),
+          ),
+        ],
       ),
     );
   }
